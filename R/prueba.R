@@ -29,6 +29,7 @@ cat("Preprocessing...")
 
 clients <- clients[!is.na(clients$DES_NOMBRE),]
 clients <- clients[!is.na(clients$DES_PRIMER_APELLIDO),]
+clients <- clients[!is.na(clients$DES_SEGUNDO_APELLIDO),]
 clients$DES_PRIMER_APELLIDO <-
   replace(clients$DES_PRIMER_APELLIDO, which(clients$DES_PRIMER_APELLIDO == "APELLIDO 1"),"")
 clients$COINCIDENCIAS <- rep(0,nrow(clients))
@@ -66,7 +67,7 @@ for (index in 1:nrowReviews) {
     
     pruebaF <- eval(parse(text = paste0("prueba",result)))
     
-    df<- clients[which(pruebaF == min(pruebaF)),c("DES_NOMBRE","DES_PRIMER_APELLIDO","DES_SEGUNDO_APELLIDO", "BIN")]
+    df<- clients[which(pruebaF == min(pruebaF)),]
     df$COINCIDENCIAS <- nrow(df)
     df$DISTANCE <- min(pruebaF)
     #eval(parse(text = paste0("l$",reviews[index], "<-", df)))
@@ -89,7 +90,7 @@ for (index in 1:nrowReviews) {
     
     pruebaF <- eval(parse(text = paste0("prueba",result)))
     
-    df<- clients[which(pruebaF == min(pruebaF)),c("DES_NOMBRE","DES_PRIMER_APELLIDO","DES_SEGUNDO_APELLIDO", "BIN")]
+    df<- clients[which(pruebaF == min(pruebaF)),]
     df$COINCIDENCIAS <- nrow(df)
     df$DISTANCE <- min(pruebaF)
     l[[index]] <- df
@@ -107,14 +108,14 @@ for (index in 1:nrowReviews) {
     
     pruebaF <- eval(parse(text = paste0("prueba",result)))
     
-    df<- clients[which(pruebaF == min(pruebaF)),c("DES_NOMBRE","DES_PRIMER_APELLIDO","DES_SEGUNDO_APELLIDO", "BIN")]
+    df<- clients[which(pruebaF == min(pruebaF)),]
     df$COINCIDENCIAS <- nrow(df)
     df$DISTANCE <- min(pruebaF)
     l[[index]] <- df
   }
   else{
     result <- stringdist(reviewsUpper[index],fullNameclients, method = "jw",p = 0.1, bt = 0.1)
-    df <- clients[which(result == min(result)),c("DES_NOMBRE","DES_PRIMER_APELLIDO","DES_SEGUNDO_APELLIDO", "BIN")]
+    df <- clients[which(result == min(result)),]
     df$COINCIDENCIAS <- nrow(df)
     df$DISTANCE <- min(result)
     #eval(parse(text = paste0("l$",reviews[index], "<-", df)))
