@@ -1,0 +1,6 @@
+<config>
+  <pathTable1>/Users/alejandromartinez/Documents/googlePlay-reviews/androidRating/2s.csv</pathTable1>
+  <pathTable2>/Users/alejandromartinez/Documents/googlePlay-reviews/client_DNI_SQL.csv</pathTable2>
+  <param1>4</param1>
+  <outputName>wasaaaa</outputName>
+</config>
