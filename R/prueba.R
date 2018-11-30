@@ -9,9 +9,8 @@ library(stringi)
 library(XML)
 
 # LECTURA DE FICHEROS.
-root <- "/Users/alejandromartinez/Documents/EVOprojects/evo-R-analytical/"
 
-reviews <- function(root){
+nickClient <- function(root){
   
 params <- xmlToList(xmlParse(paste0(root,"config/config.xml")))
 cat("Loading data...")
