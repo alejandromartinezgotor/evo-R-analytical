@@ -17,7 +17,7 @@ params <- xmlToList(xmlParse(paste0(root,"config/config.xml")))
 cat("Loading data...")
 
 #setwd("/Users/alejandromartinez/Documents/googlePlay-reviews/")
-reviews <- read.delim2(params$pathTable1, sep = ';', header = F, stringsAsFactors = F,
+reviewsFull <- read.delim2(params$pathTable1, sep = ';', header = F, stringsAsFactors = F,
                        col.names = c("Name","Date"), 
                        colClasses = c("character","character"))
 
@@ -39,9 +39,12 @@ fullNameclients <- clients[c("DES_NOMBRE","DES_PRIMER_APELLIDO","DES_SEGUNDO_APE
 
 fullNameclients <- unlist(unite(data = fullNameclients,"unificada",sep = " ",remove = TRUE),use.names = FALSE)
 fullNameclients <- gsub("\\.", "", fullNameclients)
-reviews <- reviews[reviews$Name != "",] 
-nrowReviews <- nrow(reviews)
-reviews <- stri_trans_general(reviews$Name,"Latin-ASCII")
+reviewsFull <- reviewsFull[reviewsFull$Name != "",] 
+reviewsFull <- reviewsFull[!duplicated(reviewsFull$Name),]
+nrowReviews <- nrow(reviewsFull)
+reviews <- stri_trans_general(reviewsFull$Name,"Latin-ASCII")
+reviewsFull$Name <- reviews
+colnames(reviewsFull) <- c("Name","FECHA_PUNTUACION")
 reviewsUpper <- toupper(reviews)
 
 # ALGORITMO : CALCULO DE DISTANCIAS(JARO - WIL)
@@ -125,6 +128,12 @@ for (index in 1:nrowReviews) {
 names(l) <- reviews
 finalDF <- rbindlist(l = l,idcol = "NICKNAME")
 
+finalDF <- merge(x = finalDF, y = reviewsFull,by.x = "NICKNAME",by.y = "Name")
+finalDF$LAST_CONTRACT <- replace(x = finalDF$LAST_CONTRACT,
+                                 list = which(finalDF$LAST_CONTRACT == "0001-01-01 00:00:00"),
+                                 values = " ")
+names(finalDF)[names(finalDF) == 'BIN'] <- 'BAJA'
+finalDF$BAJA <- as.logical(finalDF$BAJA)
 cat("Saving results...")
 
 #ORDENAR DATA FRAME
